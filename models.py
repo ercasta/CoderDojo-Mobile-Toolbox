@@ -62,9 +62,10 @@ class SpriteImages(models.Model):
 
 
 class GenericUserFile(models.Model):
-	title = models.CharField(max_length=200)
-	file = models.FileField(max_length=200)
-
+    title = models.CharField(max_length=200)
+    file = models.FileField(max_length=200)
+    def __str__(self):
+        return self.title
 
 class LearningTopic(models.Model):
 	title = models.CharField(max_length=200)
@@ -75,11 +76,13 @@ class LearningMaterial(models.Model):
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=1500)
     tutorial = models.OneToOneField(GenericUserFile, on_delete=models.CASCADE, related_name='+', null=True)
-    resources = models.ManyToManyField(GenericUserFile, related_name='+')
+    resources = models.ManyToManyField(GenericUserFile, related_name='+',null=True)
     screenshot = models.OneToOneField(GenericUserFile, on_delete=models.DO_NOTHING, related_name='+', null=True)
     topic = models.ForeignKey(LearningTopic,on_delete=models.DO_NOTHING,null=True)
     is_active = models.BooleanField(default=True)
     level = models.IntegerField()
+    def __str__(self):
+        return self.title
 
 class Participant(models.Model):
     name = models.CharField(max_length=200)
