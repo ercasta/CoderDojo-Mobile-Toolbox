@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models import Avg
 from . models import *
 import os
 import unicodedata
@@ -69,6 +70,7 @@ def handle_uploaded_file(uploaded,description):
         
     return files
 
+
 def tutorials(request,topic_id,material_level=None):
     context = base_function(request)
     # if this is a POST request we need to process the form data
@@ -82,14 +84,15 @@ def tutorials(request,topic_id,material_level=None):
     # if a GET (or any other method) we'll create a blank form
     else:
         # but still we have to filter checking whether a specific level was requested by url or by form
+        # Average rating is retrieved using Django powerful model query api
         try:
             requested_material_level = request.GET['level'] # read from form get
         except KeyError:
             requested_material_level = None
         if requested_material_level is None or requested_material_level == LevelSelectionForm.LEVEL_ALL:
-            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True).order_by('level','title')
+            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
         else:
-            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True,level=requested_material_level).order_by('level','title')
+            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True,level=requested_material_level).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
         form = TutorialUploadForm()
         search_form = LevelSelectionForm()
         context.update({'projects': projects, 

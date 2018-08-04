@@ -45,7 +45,8 @@
 			<div class="col-md-8">
                 {% with project.level|stringformat:"s" as level_string %} {# need to format this as string otherwise concat fails#}
                     {% with 'toolbox/images/level_'|add:level_string|add:'.svg' as image_static %}
-                        <h2 class="text-left"><img src="{% static image_static %}" alt="{{project.level}}"/> {{project.title}}</h2>
+                        <h2 class="text-left"><img src="{% static image_static %}" alt="{{project.level}}"/> {{project.title}} 
+                    {%if project.avg_rating %}({% trans "rating" %}: {{project.avg_rating}}) {%endif %}</h2>
                     {% endwith %}
                 {% endwith %}
 				<p class="text-left" >{{project.description}}</p>

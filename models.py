@@ -105,3 +105,13 @@ class Ticket(models.Model):
     uuid = models.CharField(max_length=1500)
     def __str__(self):
         return self.participant.__str__() + " at " + self.event.__str__()
+
+class Rating(models.Model):
+    material = models.ForeignKey(LearningMaterial, on_delete=models.DO_NOTHING)
+    value = models.DecimalField(max_digits=3,decimal_places=2)
+    rating_date = models.DateField()
+    rating_source = models.CharField(max_length=45) #Max length of IPv6 addr https://stackoverflow.com/questions/166132/maximum-length-of-the-textual-representation-of-an-ipv6-address
+    rating_author = models.CharField(max_length=150, null=True, blank=True)
+    comment = models.CharField(max_length=1500,null=True, blank = True)
+    def __str__(self):
+        return "Rating " + str(self.value) + " for " + self.material.__str__() + " on " + self.rating_date.__str__() +  (" by " + self.comment if self.comment != None else "")
