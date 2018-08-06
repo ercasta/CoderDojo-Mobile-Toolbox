@@ -1,6 +1,5 @@
 # Development roadmap
 
-- Tutorial uploading
 - Authentication
 - i18n
 - Learning material improvements:    

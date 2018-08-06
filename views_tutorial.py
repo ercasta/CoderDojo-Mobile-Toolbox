@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .forms import TutorialUploadForm,LevelSelectionForm
+from .forms import TutorialUploadForm,LevelSelectionForm,RatingForm
 from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Avg
+from django.urls import reverse_lazy #https://docs.djangoproject.com/en/dev/ref/urlresolvers/#reverse-lazy
+import datetime
 from . models import *
 import os
 import unicodedata
@@ -18,6 +20,15 @@ def thanks(request):
     context = base_function(request)
     context.update({'tutorial_name':"tutorial.pdf", 'tutorial_screenshot':"screenshot.png", 'tutorial_resources':"resources.zip"})
     return render(request, "coderdojomobile/thanks_tutorial.html", context)
+
+def thanks_rating(request):
+    context = base_function(request)
+    return render(request, "coderdojomobile/thanks_rating.html", context)
+
+def rating_error(request):
+    context = base_function(request)
+    return render(request, "coderdojomobile/rating_error.html", context)
+
 
 def handle_uploaded_file(uploaded,description):
     files = {}
@@ -101,10 +112,32 @@ def tutorials(request,topic_id,material_level=None):
                     'search_form' : search_form})
         return render(request, 'coderdojomobile/tutorials.html', context)
 
+def handle_learning_material_rating(request,tutorial):
+    # create a form instance and populate it with data from the request:
+    form = RatingForm(request.POST)
+    # check whether it's valid:
+    if form.is_valid():
+        rating = Rating()
+        rating.value = form.cleaned_data['value']
+        rating.comment = form.cleaned_data['comment']
+        rating.material = tutorial
+        rating.rating_date = datetime.date.today()
+        rating.rating_source = request.META['REMOTE_ADDR']
+        rating.rating_author = form.cleaned_data['rating_author']
+        rating.save()
+        return HttpResponseRedirect(reverse_lazy('coderdojomobile:rating_thanks'))
+    else:
+        return HttpResponseRedirect(reverse_lazy('coderdojomobile:rating_error'))
+
 def tutorial(request, tutorial_id):
     context = base_function(request)
     tutorial=LearningMaterial.objects.get(id=tutorial_id)
-    context.update({'project': tutorial,
+    form = RatingForm()
+    context.update({'form': form})
+    if request.method == 'POST':
+        return handle_learning_material_rating(request,tutorial)
+    else:
+        context.update({'project': tutorial,
                 'project_resources' : tutorial.resources.all()})
     return render(request, "coderdojomobile/tutorial.html", context)
 

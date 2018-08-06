@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 12:08+0200\n"
+"POT-Creation-Date: 2018-08-06 16:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,20 @@ msgstr "Annulla Check in"
 #: .\coderdojomobile\forms.py:46
 msgid "Check_in_or_cancel"
 msgstr "Check in / annulla"
+
+#: .\coderdojomobile\forms.py:51
+#, fuzzy
+#| msgid "rating"
+msgid "Rating"
+msgstr "Voto"
+
+#: .\coderdojomobile\forms.py:52
+msgid "Rating_Author"
+msgstr "Il tuo nome"
+
+#: .\coderdojomobile\forms.py:53
+msgid "Rating_Comment"
+msgstr "Commento"
 
 #: .\coderdojomobile\templates\coderdojomobile\base.html:52
 #: .\coderdojomobile\templates\coderdojomobile\index.html:24
@@ -159,18 +173,39 @@ msgstr "Programmi per creare giochi e immagini"
 msgid "Sprites_Long"
 msgstr "Tante immagini per creare i tuoi giochi"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:15
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:26
+#: .\coderdojomobile\templates\coderdojomobile\rating_error.html:5
+msgid "rating_error_title"
+msgstr "Valutazione non riuscita"
+
+#: .\coderdojomobile\templates\coderdojomobile\rating_error.html:22
+msgid "rating_error_message"
+msgstr "Valutazione non riuscita, please fill the form correctly"
+
+#: .\coderdojomobile\templates\coderdojomobile\thanks_rating.html:5
+msgid "thanks"
+msgstr "Grazie"
+
+#: .\coderdojomobile\templates\coderdojomobile\thanks_rating.html:22
+msgid "thanks_rating"
+msgstr "Grazie per il voto!"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:16
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:27
 msgid "tutorial"
 msgstr "Tutorial"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:31
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:32
 msgid "Resources"
 msgstr "Risorse"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:39
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:40
 msgid "tutorial_not_found"
 msgstr "Tutorial non trovato"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:49
+#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:74
+msgid "Rate"
+msgstr "Valuta"
 
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:23
 msgid "Tutorials"
@@ -180,10 +215,9 @@ msgstr "Tutorial"
 msgid "search"
 msgstr "Cerca"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:48
+#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:49
 msgid "rating"
 msgstr "voto"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:73
-msgid "Upload"
-msgstr "Carica"
+#~ msgid "Upload"
+#~ msgstr "Carica"
