@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-06 16:36+0200\n"
+"POT-Creation-Date: 2018-08-08 07:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,6 +207,28 @@ msgstr "Tutorial non trovato"
 msgid "Rate"
 msgstr "Valuta"
 
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:58
+msgid "ratings"
+msgstr "Valutazioni"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:65
+#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:49
+msgid "rating"
+msgstr "voto"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:75
+msgid "Rating left by %(author)s on %(rating_date)s"
+msgstr "Valutazione lasciata da %(author)s il %(rating_date)s"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:77
+#, python-format
+msgid "Rating left on %(rating_date)s"
+msgstr "Valutazione lasciata il %(rating_date)s"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:84
+msgid "no_comments"
+msgstr "Nessuna valutazione"
+
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:23
 msgid "Tutorials"
 msgstr "Tutorial"
@@ -214,10 +236,6 @@ msgstr "Tutorial"
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:31
 msgid "search"
 msgstr "Cerca"
-
-#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:49
-msgid "rating"
-msgstr "voto"
 
 #~ msgid "Upload"
 #~ msgstr "Carica"

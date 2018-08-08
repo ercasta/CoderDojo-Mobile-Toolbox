@@ -20,9 +20,10 @@
     - Save rating in detailed view
     - Show rating and comments from the detailed learning material
     - Manage editing vs new comments
-    - Show rating with stars and half stars
-    - Allow setting numerical rating by clicking stars
 - Badges
     - Datamodel
     - Show badges in event list
     - Show number of previous participations in event list
+- Learning Material rating (advanced)
+    - Show rating with stars and half stars
+    - Allow setting numerical rating by clicking stars

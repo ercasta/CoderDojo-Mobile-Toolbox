@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-06 16:36+0200\n"
+"POT-Creation-Date: 2018-08-08 08:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,23 +184,46 @@ msgstr "Thanks"
 msgid "thanks_rating"
 msgstr "Thanks for rating!"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:16
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:27
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:19
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:30
 msgid "tutorial"
 msgstr ""
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:32
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:35
 msgid "Resources"
 msgstr ""
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:40
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:43
 msgid "tutorial_not_found"
 msgstr "Tutorial not found"
 
-#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:49
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:52
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:74
 msgid "Rate"
 msgstr ""
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:61
+msgid "ratings"
+msgstr "Thanks for rating!"
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:68
+#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:49
+msgid "rating"
+msgstr ""
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:78
+#, python-format
+msgid "Rating left by %(author)s on %(rating_date)s"
+msgstr ""
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:80
+#, python-format
+msgid "Rating left on %(rating_date)s"
+msgstr ""
+
+#: .\coderdojomobile\templates\coderdojomobile\tutorial.html:86
+msgid "no_comments"
+msgstr "No ratings"
 
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:23
 msgid "Tutorials"
@@ -209,7 +232,3 @@ msgstr ""
 #: .\coderdojomobile\templates\coderdojomobile\tutorials.html:31
 msgid "search"
 msgstr "Search"
-
-#: .\coderdojomobile\templates\coderdojomobile\tutorials.html:49
-msgid "rating"
-msgstr ""

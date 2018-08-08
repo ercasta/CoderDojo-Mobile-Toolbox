@@ -7,6 +7,7 @@ from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Avg
+from django.utils import formats
 from django.urls import reverse_lazy #https://docs.djangoproject.com/en/dev/ref/urlresolvers/#reverse-lazy
 import datetime
 from . models import *
@@ -133,12 +134,16 @@ def tutorial(request, tutorial_id):
     context = base_function(request)
     tutorial=LearningMaterial.objects.get(id=tutorial_id)
     form = RatingForm()
+    ratings=Rating.objects.all().filter(material_id=tutorial_id)
     context.update({'form': form})
+    for r in ratings:
+        r.date_formatted = formats.date_format(r.rating_date, 'DATE_FORMAT')
     if request.method == 'POST':
         return handle_learning_material_rating(request,tutorial)
     else:
         context.update({'project': tutorial,
-                'project_resources' : tutorial.resources.all()})
+                'project_resources' : tutorial.resources.all(),
+                'ratings':ratings})
     return render(request, "coderdojomobile/tutorial.html", context)
 
 
