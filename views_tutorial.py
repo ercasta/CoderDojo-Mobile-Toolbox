@@ -118,22 +118,51 @@ def handle_learning_material_rating(request,tutorial):
     form = RatingForm(request.POST)
     # check whether it's valid:
     if form.is_valid():
-        rating = Rating()
-        rating.value = form.cleaned_data['value']
-        rating.comment = form.cleaned_data['comment']
-        rating.material = tutorial
-        rating.rating_date = datetime.date.today()
-        rating.rating_source = request.META['REMOTE_ADDR']
-        rating.rating_author = form.cleaned_data['rating_author']
+        rating = get_existing_rating_for_today(request,tutorial)
+        if rating:
+            rating.value = form.cleaned_data['value']
+            rating.comment = form.cleaned_data['comment']
+            rating.rating_author = form.cleaned_data['rating_author']
+        else:
+            rating = Rating()
+            rating.value = form.cleaned_data['value']
+            rating.comment = form.cleaned_data['comment']
+            rating.material = tutorial
+            rating.rating_date = datetime.date.today()
+            rating.rating_source = request.META['REMOTE_ADDR']
+            rating.rating_author = form.cleaned_data['rating_author']
         rating.save()
         return HttpResponseRedirect(reverse_lazy('coderdojomobile:rating_thanks'))
     else:
         return HttpResponseRedirect(reverse_lazy('coderdojomobile:rating_error'))
 
+def get_existing_rating_for_today(request,tutorial):
+    address = request.META['REMOTE_ADDR']
+    current_date = datetime.date.today()
+    existing_rating = None
+    try:
+        existing_rating = Rating.objects.get(material_id=tutorial.id,rating_date=current_date,rating_source=address)
+    except Rating.DoesNotExist:
+        existing_rating = None
+    return existing_rating
+
+def load_rating_form(request,tutorial):
+    form = RatingForm()
+    existing_rating = get_existing_rating_for_today(request,tutorial)
+    if existing_rating:
+        data = {'value': existing_rating.value,
+            'comment': existing_rating.comment,
+            'rating_author': existing_rating.rating_author
+            }
+        form =RatingForm(data) #Form is bound with pre-existing data
+    else:
+        form = RatingForm()
+    return form
+
 def tutorial(request, tutorial_id):
     context = base_function(request)
     tutorial=LearningMaterial.objects.get(id=tutorial_id)
-    form = RatingForm()
+    form = load_rating_form(request,tutorial)
     ratings=Rating.objects.all().filter(material_id=tutorial_id)
     context.update({'form': form})
     for r in ratings:
