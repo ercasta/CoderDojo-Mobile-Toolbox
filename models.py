@@ -84,10 +84,20 @@ class LearningMaterial(models.Model):
     def __str__(self):
         return self.title
 
+
+class Badge(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=1500)
+    image = models.FileField(max_length=200)
+    requisites = models.CharField(max_length=3000)
+    def __str__(self):
+        return self.title
+
 class Participant(models.Model):
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     uuid = models.CharField(max_length=200)
+    badges = models.ManyToManyField(Badge, related_name='+',null=True)
     def __str__(self):
         return self.name + " " + self.surname  + "(" + self.uuid + ")"
 

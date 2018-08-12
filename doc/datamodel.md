@@ -87,6 +87,6 @@ A ticket for an event, for a participant. Properties: Participant, Event, Ticket
 
 ## Badge
 
-A badge awarded to a Ninja. Has a title, a description, requirements for award, pre-requisites (e.g. other badges, number of presences ) 
+A badge awarded to a Ninja. Has a title, a description, an image, (pre)requirements for award (e.g. other badges, number of presences ) 
 
 

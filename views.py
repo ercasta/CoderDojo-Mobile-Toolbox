@@ -179,6 +179,9 @@ def events(request):
     })
     return render(request, 'coderdojomobile/events.html', context)
 
+def get_badges_for_event_participants(request,event_id):
+    badges = Badge.objects.filter(event__id=event_id)
+
 def eventDetails(request,event_id):
     context = base_function(request)
     event = Event.objects.order_by('event_date').get(id=event_id)
@@ -190,6 +193,14 @@ def eventDetails(request,event_id):
             missing_participants = missing_participants + 1 
     total_participants = tickets.count()
     queryset_for_form = Participant.objects.filter(ticket__event__id=event_id) # Navigate participants from tickets of this event
+    participants = queryset_for_form
+    badges = Badge.objects.all()
+    for ticket in tickets:
+        for participant in participants:
+            if participant.id==ticket.participant.id:
+                ticket.badges=[]
+                for part_badge in participant.badges.all():
+                    ticket.badges.append(part_badge)
     form = CheckInOutForm(queryset_for_form)
     context.update({
         'event': event,
