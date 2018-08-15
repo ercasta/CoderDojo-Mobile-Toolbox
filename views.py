@@ -211,6 +211,22 @@ def eventDetails(request,event_id):
     })
     return render(request, 'coderdojomobile/eventDetails.html', context)
 
+def event_do_check_in_out(event_id,participant_id,ticket_id,participant,check_in_out):
+    # Check which field is populated
+    if (not (participant_id is None)):
+            ticket=Ticket.objects.get(event__id=event_id,participant__uuid=participant_id) 
+    elif (not (ticket_id is None)):
+        ticket=Ticket.objects.get(event__id=event_id,uuid=ticket_id) 
+    elif not (participant is None):
+        ticket=Ticket.objects.get(event__id=event_id,participant__id=participant.id)
+    if not (ticket is None): # We found the ticket, set status
+        if check_in_out==CheckInOutForm.CHECK_IN:
+            ticket.has_checked_in=True
+        else:
+            ticket.has_checked_in=False
+        ticket.save()
+    return ticket
+
 @permission_required('coderdojomobile.change_ticket',login_url=reverse_lazy('coderdojomobile:login',current_app="coderdojomobile"))
 def eventCheckInOut(request,event_id):
     context = base_function(request)
@@ -220,19 +236,11 @@ def eventCheckInOut(request,event_id):
         form = CheckInOutForm(queryset_for_form=queryset,data=request.POST)
         ticket = None 
         if form.is_valid():
-            # Check which field is populated
-            if (len(form.cleaned_data['participant_id'])>0 ):
-                ticket=Ticket.objects.get(event__id=event_id,participant__uuid=form.cleaned_data['participant_id']) 
-            elif (len(form.cleaned_data['ticket_id'])>0):
-                ticket=Ticket.objects.get(event__id=event_id,uuid=form.cleaned_data['ticket_id']) 
-            elif not (form.cleaned_data['participant'] is None):
-                ticket=Ticket.objects.get(event__id=event_id,participant__id=form.cleaned_data['participant'].id)
-            if not (ticket is None): # We found the ticket, set status
-                if form.cleaned_data['check_in_out']==form.CHECK_IN:
-                    ticket.has_checked_in=True
-                else:
-                    ticket.has_checked_in=False
-                ticket.save()
+            participant_id = form.cleaned_data['participant_id']
+            ticket_id = form.cleaned_data['ticket_id']
+            participant = form.cleaned_data['participant']
+            check_in_out = form.cleaned_data['check_in_out']
+            ticket = event_do_check_in_out(event_id,participant__id,ticket_id,participant,check_in_out)
             context.update({
                 'ticket': ticket,
                 'event': ticket.event
