@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-08 08:18+0200\n"
+"POT-Creation-Date: 2018-08-18 21:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +120,7 @@ msgid "Back to the event"
 msgstr ""
 
 #: .\coderdojomobile\templates\coderdojomobile\eventCheckInOut.html:36
-#: .\coderdojomobile\templates\coderdojomobile\eventDetails.html:61
+#: .\coderdojomobile\templates\coderdojomobile\eventDetails.html:65
 msgid "Event_not_found"
 msgstr "Event not found"
 
@@ -136,7 +136,7 @@ msgstr "Still missing"
 msgid "participant_list"
 msgstr "Participant List"
 
-#: .\coderdojomobile\templates\coderdojomobile\eventDetails.html:52
+#: .\coderdojomobile\templates\coderdojomobile\eventDetails.html:56
 msgid "Confirm"
 msgstr ""
 
@@ -168,6 +168,10 @@ msgstr "Software tools to create games and resources for games"
 msgid "Sprites_Long"
 msgstr "Lots of images you can use in your games!"
 
+#: .\coderdojomobile\templates\coderdojomobile\learningTopicsSoftware.html:27
+msgid "No_Topic_Available"
+msgstr "No Topic Available"
+
 #: .\coderdojomobile\templates\coderdojomobile\rating_error.html:5
 msgid "rating_error_title"
 msgstr "Rating failed"
@@ -175,6 +179,14 @@ msgstr "Rating failed"
 #: .\coderdojomobile\templates\coderdojomobile\rating_error.html:22
 msgid "rating_error_message"
 msgstr "Rating failed, please fill the form correctly"
+
+#: .\coderdojomobile\templates\coderdojomobile\softwareDojo.html:14
+msgid "Software"
+msgstr ""
+
+#: .\coderdojomobile\templates\coderdojomobile\softwareDojo.html:24
+msgid "No_Software_Available"
+msgstr "No Software Available"
 
 #: .\coderdojomobile\templates\coderdojomobile\thanks_rating.html:5
 msgid "thanks"

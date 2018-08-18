@@ -129,8 +129,27 @@ def liberatorie(request, spec):
 def nonraggiungibile(request):
     return HttpResponse("<h2>Sito non raggiungibile. Accesso a internet inesistente")
 
-def softwareDojo(request):
+def split_software_by_os(op_sys_list, sw_list):
+    #TODO hic sunt leones, test / refactor
+    os_map={}
+    for op_sys in op_sys_list:
+        os_map[op_sys.title] = []
+    for sw in sw_list:
+        for op_sys in os_map.keys():
+            for supported_os in sw.operating_systems.all():
+                if supported_os.title == op_sys:
+                    os_map[op_sys].append(sw)
+                    break
+    return os_map
+
+def softwareDojo(request,topic_id):
     context = base_function(request)
+    #TODO filter by operating system
+    op_sys = OperatingSystem.objects.all().order_by('title')
+    tools = SoftwareTool.objects.filter(topic_id=topic_id).order_by('title')
+    sw_map = split_software_by_os(op_sys,tools)
+    context.update({
+        'sw_by_os':sw_map})
     return render(request, "coderdojomobile/softwareDojo.html",context)
 
 # Usiamo le categorie definite a db
@@ -161,13 +180,23 @@ def spriteCategory(request, category_id):
     })
     return render(request, 'coderdojomobile/spritesInCategory.html', context)
 
-def learningTopics(request):
+def learningTopicGuides(request):
     context = base_function(request)
     learning_topics = LearningTopic.objects.order_by('title')
     context.update({
         'learning_topics': learning_topics
     })
-    return render(request, 'coderdojomobile/learningTopics.html', context)
+    return render(request, 'coderdojomobile/learningTopicsGuides.html', context)
+
+def learningTopicSoftwares(request):
+    context = base_function(request)
+    learning_topics = LearningTopic.objects.order_by('title')
+    context.update({
+        'learning_topics': learning_topics
+    })
+    return render(request, 'coderdojomobile/learningTopicsSoftware.html', context)
+
+
 
 
 

@@ -68,9 +68,11 @@ class GenericUserFile(models.Model):
         return self.title
 
 class LearningTopic(models.Model):
-	title = models.CharField(max_length=200)
-	description = models.CharField(max_length=1500)
-	screenshot = models.FileField(max_length=200, upload_to="learningtopic/")
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=1500)
+    screenshot = models.FileField(max_length=200, upload_to="learningtopic/")
+    def __str__(self):
+        return self.title
 
 class LearningMaterial(models.Model):
     title = models.CharField(max_length=200)
@@ -125,3 +127,20 @@ class Rating(models.Model):
     comment = models.CharField(max_length=1500,null=True, blank = True)
     def __str__(self):
         return "Rating " + str(self.value) + " for " + self.material.__str__() + " on " + self.rating_date.__str__() +  (" by " + self.comment if self.comment != None else "")
+
+#For software tools
+class OperatingSystem(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=1500)
+    def __str__(self):
+        return self.title
+
+class SoftwareTool(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=1500)
+    operating_systems = models.ManyToManyField(OperatingSystem, related_name='+')
+    executable = models.OneToOneField(GenericUserFile, on_delete=models.CASCADE, related_name='+', null=True)
+    topic = models.ForeignKey(LearningTopic,on_delete=models.DO_NOTHING,null=True)
+    is_active = models.BooleanField(default=True)
+    def __str__(self):
+        return self.title

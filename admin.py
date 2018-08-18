@@ -28,3 +28,6 @@ admin.site.register(Participant)
 admin.site.register(Ticket)
 admin.site.register(Rating)
 admin.site.register(Badge)
+
+admin.site.register(OperatingSystem)
+admin.site.register(SoftwareTool)
