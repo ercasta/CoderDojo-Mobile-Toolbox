@@ -17,7 +17,7 @@ from . models import Liberatoria
 from . models import LearningTopic
 from . models import OperatingSystem
 from . models import SoftwareTool
-from . models import Badge 
+
 import os
 import unicodedata
 from django.contrib.auth.decorators import permission_required
@@ -240,9 +240,10 @@ def nonraggiungibile(request):
         "<h2>Sito non raggiungibile. Accesso a internet inesistente"
     )
 
+
 def split_software_by_os(op_sys_list, sw_list):
-    #TODO hic sunt leones, test / refactor
-    os_map={}
+    # TODO hic sunt leones, test / refactor
+    os_map = {}
     for op_sys in op_sys_list:
         os_map[op_sys.title] = []
     for sw in sw_list:
@@ -253,15 +254,16 @@ def split_software_by_os(op_sys_list, sw_list):
                     break
     return os_map
 
-def softwareDojo(request,topic_id):
+
+def softwareDojo(request, topic_id):
     context = base_function(request)
-    #TODO filter by operating system
+    # TODO filter by operating system
     op_sys = OperatingSystem.objects.all().order_by('title')
     tools = SoftwareTool.objects.filter(topic_id=topic_id).order_by('title')
-    sw_map = split_software_by_os(op_sys,tools)
+    sw_map = split_software_by_os(op_sys, tools)
     context.update({
-        'sw_by_os':sw_map})
-    return render(request, "coderdojomobile/softwareDojo.html",context)
+        'sw_by_os': sw_map})
+    return render(request, "coderdojomobile/softwareDojo.html", context)
 
 
 # Usiamo le categorie definite a db
@@ -298,13 +300,19 @@ def spriteCategory(request, category_id):
     })
     return render(request, 'coderdojomobile/spritesInCategory.html', context)
 
+
 def learningTopicGuides(request):
     context = base_function(request)
     learning_topics = LearningTopic.objects.order_by('title')
     context.update({
         'learning_topics': learning_topics
     })
-    return render(request, 'coderdojomobile/learningTopicsGuides.html', context)
+    return render(
+                 request,
+                 'coderdojomobile/learningTopicsGuides.html',
+                 context
+                 )
+
 
 def learningTopicSoftwares(request):
     context = base_function(request)
@@ -312,9 +320,11 @@ def learningTopicSoftwares(request):
     context.update({
         'learning_topics': learning_topics
     })
-    return render(request, 'coderdojomobile/learningTopicsSoftware.html', context)
-
-
+    return render(
+                 request,
+                 'coderdojomobile/learningTopicsSoftware.html',
+                 context
+                 )
 
 
 def events(request):
@@ -325,10 +335,8 @@ def events(request):
     })
     return render(request, 'coderdojomobile/events.html', context)
 
-def get_badges_for_event_participants(request,event_id):
-    badges = Badge.objects.filter(event__id=event_id)
 
-def eventDetails(request,event_id):
+def eventDetails(request, event_id):
     context = base_function(request)
     event = Event.objects.order_by('event_date').get(id=event_id)
     tickets = Ticket.objects.order_by('participant__name').filter(
@@ -343,11 +351,10 @@ def eventDetails(request,event_id):
     # Navigate participants from tickets of this event
     queryset_for_form = Participant.objects.filter(ticket__event__id=event_id)
     participants = queryset_for_form
-    badges = Badge.objects.all()
     for ticket in tickets:
         for participant in participants:
-            if participant.id==ticket.participant.id:
-                ticket.badges=[]
+            if participant.id == ticket.participant.id:
+                ticket.badges = []
                 for part_badge in participant.badges.all():
                     ticket.badges.append(part_badge)
     form = CheckInOutForm(queryset_for_form)

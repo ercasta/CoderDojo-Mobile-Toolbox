@@ -14,21 +14,54 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OperatingSystem',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                                       auto_created=True,
+                                       primary_key=True,
+                                       serialize=False,
+                                       verbose_name='ID'
+                                       )),
                 ('title', models.CharField(max_length=200)),
                 ('description', models.CharField(max_length=1500)),
             ],
         ),
         migrations.CreateModel(
             name='SoftwareTool',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.CharField(max_length=1500)),
-                ('is_active', models.BooleanField(default=True)),
-                ('executable', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='coderdojomobile.GenericUserFile')),
-                ('operating_systems', models.ManyToManyField(related_name='_softwaretool_operating_systems_+', to='coderdojomobile.OperatingSystem')),
-                ('topic', models.ForeignKey(null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='coderdojomobile.LearningTopic')),
-            ],
+            fields=[(
+                    'id', models.AutoField(
+                                       auto_created=True,
+                                       primary_key=True,
+                                       serialize=False,
+                                       verbose_name='ID'
+                                       )
+                    ),
+                    ('title', models.CharField(max_length=200)),
+                    ('description', models.CharField(max_length=1500)),
+                    ('is_active', models.BooleanField(default=True)),
+                    (
+                    'executable',
+                    models.OneToOneField(
+                                        null=True,
+                                        on_delete=django.db
+                                        .models.deletion.CASCADE,
+                                        related_name='+',
+                                        to='coderdojomobile.GenericUserFile'
+                                        )
+                    ),
+                    (
+                    'operating_systems',
+                    models
+                    .ManyToManyField(
+                            related_name='_softwaretool_operating_systems_+',
+                            to='coderdojomobile.OperatingSystem'
+                                    )
+                    ),
+                    (
+                    'topic',
+                    models.ForeignKey(
+                            null=True,
+                            on_delete=django.db.models.deletion.DO_NOTHING,
+                            to='coderdojomobile.LearningTopic'
+                                    )
+                    ), ],
         ),
     ]

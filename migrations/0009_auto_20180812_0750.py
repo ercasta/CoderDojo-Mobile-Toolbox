@@ -13,13 +13,28 @@ class Migration(migrations.Migration):
     operations = [
         migrations.CreateModel(
             name='Badge',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.CharField(max_length=1500)),
-                ('requisites', models.CharField(max_length=3000)),
-                ('image', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='coderdojomobile.GenericUserFile')),
-            ],
+            fields=[(
+                    'id',
+                    models.AutoField(
+                                    auto_created=True,
+                                    primary_key=True,
+                                    serialize=False,
+                                    verbose_name='ID'
+                                    )
+                    ),
+                    ('title', models.CharField(max_length=200)),
+                    ('description', models.CharField(max_length=1500)),
+                    ('requisites', models.CharField(max_length=3000)),
+                    (
+                    'image',
+                    models.OneToOneField(
+                                        null=True,
+                                        on_delete=django.db
+                                        .models.deletion.CASCADE,
+                                        related_name='+',
+                                        to='coderdojomobile.GenericUserFile'
+                                        )
+                    ), ],
         ),
         migrations.AlterField(
             model_name='rating',
@@ -34,6 +49,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='participant',
             name='badges',
-            field=models.ManyToManyField(null=True, related_name='_participant_badges_+', to='coderdojomobile.Badge'),
+            field=models.ManyToManyField(
+                                        null=True,
+                                        related_name='_participant_badges_+',
+                                        to='coderdojomobile.Badge'
+                                        ),
         ),
     ]

@@ -13,7 +13,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='learningmaterial',
             name='resources',
-            field=models.ManyToManyField(null=True, related_name='_learningmaterial_resources_+', to='coderdojomobile.GenericUserFile'),
+            field=models
+            .ManyToManyField(
+                            null=True,
+                            related_name='_learningmaterial_resources_+',
+                            to='coderdojomobile.GenericUserFile'
+                            ),
         ),
         migrations.AlterField(
             model_name='ticket',
