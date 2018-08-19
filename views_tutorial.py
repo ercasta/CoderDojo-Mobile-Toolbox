@@ -10,7 +10,7 @@ from django.db.models import Avg
 from django.utils import formats
 from django.urls import reverse_lazy #https://docs.djangoproject.com/en/dev/ref/urlresolvers/#reverse-lazy
 import datetime
-from . models import *
+from . import models
 import os
 import unicodedata
 import zipfile
@@ -19,7 +19,11 @@ from . views import base_function
 
 def thanks(request):
     context = base_function(request)
-    context.update({'tutorial_name':"tutorial.pdf", 'tutorial_screenshot':"screenshot.png", 'tutorial_resources':"resources.zip"})
+    context.update({
+        'tutorial_name': "tutorial.pdf",
+        'tutorial_screenshot': "screenshot.png",
+        'tutorial_resources': "resources.zip"
+    })
     return render(request, "coderdojomobile/thanks_tutorial.html", context)
 
 def thanks_rating(request):
@@ -51,35 +55,46 @@ def handle_uploaded_file(uploaded,description):
             if f.endswith('pdf'):
                 with z.open(f) as pdfFileInZip:
                     pdfFile = File(pdfFileInZip)
-                    tutorial_entity = GenericUserFile(title=f, file = pdfFile)
-                    # now g.file is a FieldFile object https://docs.djangoproject.com/en/2.0/ref/models/fields/#filefield-and-fieldfile
-                    tutorial_entity.file.field.upload_to="tutorial/" # We need to set the base folder as generic files have no base folder
-                    tutorial_entity.save() # This automatically saves the file
+                    tutorial_entity = models.GenericUserFile(
+                        title=f,
+                        file=pdfFile
+                    )
+                    # now g.file is a FieldFile object https://bit.ly/2LGt9QE
+                    # We need to set the base folder as generic files have
+                    # no base folder
+                    tutorial_entity.file.field.upload_to = "tutorial/"
+                    tutorial_entity.save()  # automatically saves the file
             if f.endswith('png'):
                 with z.open(f) as pdfFileInZip:
                     pngFile = File(pdfFileInZip)
-                    screenshot_entity = GenericUserFile(title=f, file = pngFile)
-                    screenshot_entity.file.field.upload_to="tutorial/"
+                    screenshot_entity = models.GenericUserFile(
+                        title=f,
+                        file=pngFile
+                    )
+                    screenshot_entity.file.field.upload_to = "tutorial/"
                     screenshot_entity.save()
             if f.endswith('zip'):
                 with z.open(f) as pdfFileInZip:
                     resourceFile = File(pdfFileInZip)
-                    resource_entity = GenericUserFile(title=f, file = resourceFile)
-                    resource_entity.file.field.upload_to="tutorial/"
+                    resource_entity = models.GenericUserFile(
+                        title=f,
+                        file=resourceFile
+                    )
+                    resource_entity.file.field.upload_to = "tutorial/"
                     resource_entity.save()
         # Now save the tutorial
-        learningMaterial = LearningMaterial()
+        learningMaterial = models.LearningMaterial()
         learningMaterial.title = project_name
-        learningMaterial.description = description       
+        learningMaterial.description = description
         learningMaterial.tutorial = tutorial_entity
         learningMaterial.screenshot = screenshot_entity
         learningMaterial.save()
         learningMaterial.resources.add(resource_entity)
         learningMaterial.save()
         # For now just save the file to GenericUserFiles
-        #g = GenericUserFile(title="tutorial.pdf", file = pdfFile)
-        #g.save()
-        
+        # g = GenericUserFile(title="tutorial.pdf", file = pdfFile)
+        # g.save()
+
     return files
 
 
@@ -91,26 +106,33 @@ def tutorials(request,topic_id,material_level=None):
         form = TutorialUploadForm(request.POST, request.FILES)
         # check whether it's valid:
         if form.is_valid():
-            files = handle_uploaded_file(request.FILES['tutorial_file'],request.POST['tutorial_description'])
+            files = handle_uploaded_file(
+                request.FILES['tutorial_file'],
+                request.POST['tutorial_description']
+            )
+            if not files:
+                raise Exception("No uploaded files!")
             return HttpResponseRedirect(reverse_lazy('coderdojomobile:thanks'))
     # if a GET (or any other method) we'll create a blank form
     else:
-        # but still we have to filter checking whether a specific level was requested by url or by form
+        # but still we have to filter checking whether a specific level was
+        # requested by url or by form
         # Average rating is retrieved using Django powerful model query api
         try:
-            requested_material_level = request.GET['level'] # read from form get
+            # read from form get
+            requested_material_level = request.GET['level']
         except KeyError:
             requested_material_level = None
         if requested_material_level is None or requested_material_level == LevelSelectionForm.LEVEL_ALL:
-            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
+            projects=models.LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
         else:
-            projects=LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True,level=requested_material_level).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
+            projects=models.LearningMaterial.objects.all().filter(topic_id=topic_id,is_active=True,level=requested_material_level).order_by('level','title').annotate(avg_rating=Avg('rating__value'))
         form = TutorialUploadForm()
         search_form = LevelSelectionForm()
-        context.update({'projects': projects, 
-                    'form' : form,
-                    'topic_id': topic_id,
-                    'search_form' : search_form})
+        context.update({'projects': projects,
+                        'form': form,
+                        'topic_id': topic_id,
+                        'search_form': search_form})
         return render(request, 'coderdojomobile/tutorials.html', context)
 
 def handle_learning_material_rating(request,tutorial):
@@ -124,7 +146,7 @@ def handle_learning_material_rating(request,tutorial):
             rating.comment = form.cleaned_data['comment']
             rating.rating_author = form.cleaned_data['rating_author']
         else:
-            rating = Rating()
+            rating = models.Rating()
             rating.value = form.cleaned_data['value']
             rating.comment = form.cleaned_data['comment']
             rating.material = tutorial
@@ -141,8 +163,8 @@ def get_existing_rating_for_today(request,tutorial):
     current_date = datetime.date.today()
     existing_rating = None
     try:
-        existing_rating = Rating.objects.get(material_id=tutorial.id,rating_date=current_date,rating_source=address)
-    except Rating.DoesNotExist:
+        existing_rating = models.Rating.objects.get(material_id=tutorial.id,rating_date=current_date,rating_source=address)
+    except models.Rating.DoesNotExist:
         existing_rating = None
     return existing_rating
 
@@ -161,9 +183,9 @@ def load_rating_form(request,tutorial):
 
 def tutorial(request, tutorial_id):
     context = base_function(request)
-    tutorial=LearningMaterial.objects.get(id=tutorial_id)
+    tutorial = models.LearningMaterial.objects.get(id=tutorial_id)
     form = load_rating_form(request,tutorial)
-    ratings=Rating.objects.all().filter(material_id=tutorial_id)
+    ratings=models.Rating.objects.all().filter(material_id=tutorial_id)
     context.update({'form': form})
     for r in ratings:
         r.date_formatted = formats.date_format(r.rating_date, 'DATE_FORMAT')
@@ -174,5 +196,3 @@ def tutorial(request, tutorial_id):
                 'project_resources' : tutorial.resources.all(),
                 'ratings':ratings})
     return render(request, "coderdojomobile/tutorial.html", context)
-
-

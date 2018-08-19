@@ -1,33 +1,34 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import *
+from . import models
+
 
 class LibroOption(admin.ModelAdmin):
-    list_display = ( 'titolo', 'autore', 'genere', 'livello', 'posizione')
+    list_display = ('titolo', 'autore', 'genere', 'livello', 'posizione')
+
 
 class LiberatoriaOption(admin.ModelAdmin):
     list_display = ('cognome', 'nome', 'consegnata', 'data_di_consegna')
 
-admin.site.register(Genere)
-admin.site.register(Autore)
-admin.site.register(Libro, LibroOption)
-admin.site.register(Liberatoria, LiberatoriaOption)
 
-admin.site.register(Sprite)
+admin.site.register(models.Genere)
+admin.site.register(models.Autore)
+admin.site.register(models.Libro)
+admin.site.register(models.Liberatoria)
 
-admin.site.register(SpriteCategory)
+admin.site.register(models.Sprite)
 
-admin.site.register(SpriteImages)
+admin.site.register(models.SpriteCategory)
 
-admin.site.register(GenericUserFile)
+admin.site.register(models.SpriteImages)
 
-admin.site.register(LearningMaterial)
-admin.site.register(Event)
-admin.site.register(Participant)
-admin.site.register(Ticket)
-admin.site.register(Rating)
-admin.site.register(Badge)
+admin.site.register(models.LearningMaterial)
+admin.site.register(models.Event)
+admin.site.register(models.Participant)
+admin.site.register(models.Ticket)
+admin.site.register(models.Rating)
+admin.site.register(models.Badge)
 
-admin.site.register(OperatingSystem)
-admin.site.register(SoftwareTool)
+admin.site.register(models.OperatingSystem)
+admin.site.register(models.SoftwareTool)
