@@ -12,6 +12,7 @@ Welcome to CoderDojo Mobile Toolbox's documentation!
 
    introduction.rst
    learning_material.rst
+   software tools
    events.rst
 
 Indices and tables
