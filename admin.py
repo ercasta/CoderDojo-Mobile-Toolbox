@@ -32,3 +32,4 @@ admin.site.register(models.Badge)
 
 admin.site.register(models.OperatingSystem)
 admin.site.register(models.SoftwareTool)
+admin.site.register(models.LearningTopic)
