@@ -11,6 +11,8 @@ Welcome to CoderDojo Mobile Toolbox's documentation!
    :caption: Contents:
 
    introduction.rst
+   installing
+   users
    learning_material.rst
    software tools
    events.rst
