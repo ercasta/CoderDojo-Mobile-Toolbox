@@ -337,6 +337,10 @@ def events(request):
     return render(request, 'coderdojomobile/events.html', context)
 
 
+def add_waiver_status_to_ticket(ticket):
+    ticket.has_valid_waiver = has_valid_waiver(ticket)
+
+
 def eventDetails(request, event_id):
     context = base_function(request)
     event = Event.objects.order_by('event_date').get(id=event_id)
@@ -355,6 +359,7 @@ def eventDetails(request, event_id):
     for ticket in tickets:
         for participant in participants:
             if participant.id == ticket.participant.id:
+                add_waiver_status_to_ticket(ticket)
                 ticket.badges = []
                 for part_badge in participant.badges.all():
                     ticket.badges.append(part_badge)
