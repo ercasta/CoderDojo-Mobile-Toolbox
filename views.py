@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 # from django.template import loader
 # from .forms import TutorialUploadForm
 from .forms import CheckInOutForm
@@ -368,6 +369,24 @@ def eventDetails(request, event_id):
     return render(request, 'coderdojomobile/eventDetails.html', context)
 
 
+def is_valid_waiver_for_event(waiver, event):
+    return waiver is not None \
+           and waiver.valid \
+           and (waiver.expiry_date is None
+                or waiver.expiry_date > event.event_date)
+
+
+def has_valid_waiver(ticket):
+    waiver = None
+    waiver_valid = False
+    try:
+        waiver = ticket.participant.waiver
+    except ObjectDoesNotExist:
+        waiver = None
+    waiver_valid = is_valid_waiver_for_event(waiver, ticket.event)
+    return waiver_valid
+
+
 @permission_required(
     'coderdojomobile.change_ticket',
     login_url=reverse_lazy('coderdojomobile:login',
@@ -381,33 +400,48 @@ def eventCheckInOut(request, event_id):
         queryset = Participant.objects.filter(ticket__event__id=event_id)
         form = CheckInOutForm(queryset_for_form=queryset, data=request.POST)
         ticket = None
+        event = None
+        ticket_found = False
+        waiver_valid = False
+        try:
+            event = Event.objects.get(id=event_id)
+        except ObjectDoesNotExist:
+            event = None
         if form.is_valid():
             # Check which field is populated
-            if (len(form.cleaned_data['participant_id']) > 0):
-                ticket = Ticket.objects.get(
-                    event__id=event_id,
-                    participant__uuid=form.cleaned_data['participant_id']
-                )
-            elif (len(form.cleaned_data['ticket_id']) > 0):
-                ticket = Ticket.objects.get(
-                    event__id=event_id,
-                    uuid=form.cleaned_data['ticket_id']
-                )
-            elif not (form.cleaned_data['participant'] is None):
-                ticket = Ticket.objects.get(
-                    event__id=event_id,
-                    participant__id=form.cleaned_data['participant'].id
-                )
+            try:
+                if (len(form.cleaned_data['participant_id']) > 0):
+                    ticket = Ticket.objects.get(
+                        event__id=event_id,
+                        participant__uuid=form.cleaned_data['participant_id']
+                    )
+                elif (len(form.cleaned_data['ticket_id']) > 0):
+                    ticket = Ticket.objects.get(
+                        event__id=event_id,
+                        uuid=form.cleaned_data['ticket_id']
+                    )
+                elif not (form.cleaned_data['participant'] is None):
+                    ticket = Ticket.objects.get(
+                        event__id=event_id,
+                        participant__id=form.cleaned_data['participant'].id
+                    )
+            except ObjectDoesNotExist:
+                ticket = None
             if not (ticket is None):  # We found the ticket, set status
+                ticket_found = True
                 if form.cleaned_data['check_in_out'] == form.CHECK_IN:
                     ticket.has_checked_in = True
                 else:
                     ticket.has_checked_in = False
                 ticket.save()
-            context.update({
-                'ticket': ticket,
-                'event': ticket.event
-            })
+                # check waiver status
+                waiver_valid = has_valid_waiver(ticket)
+        context.update({
+            'ticket': ticket,
+            'event': event,
+            'waiver_is_valid': waiver_valid,
+            'ticket_found': ticket_found
+        })
         return render(request, 'coderdojomobile/eventCheckInOut.html', context)
 
 
