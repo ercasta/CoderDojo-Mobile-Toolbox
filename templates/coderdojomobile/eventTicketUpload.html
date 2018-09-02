@@ -1,0 +1,39 @@
+
+{% extends "coderdojomobile/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Event" %}{% endblock %}
+
+{% block page_styles %}
+{% endblock page_styles%}
+
+{% block content %}
+
+<!-- Complete --> 
+
+<div class="container">
+
+{% if event %}
+    <h2 class="text-center">{{event.title}}</h2>
+    
+    <p class="text-center" >{{event.description}}</p>
+
+    <ul>
+        {% for ticket in tickets %}
+        <li><span style="color:green">{% bootstrap_icon "ok-circle" %}</span>
+        {% blocktrans with name=ticket.participant.name|title surname=ticket.participant.surname|title uuid=ticket.uuid|title %}Ticket_created {{name}} {{surname}} {{uuid}} {% endblocktrans %}
+        {% endfor %}
+    </ul>
+    <a href="{% url 'coderdojomobile:eventDetails' event.id %}"/>{% trans "Back to the event"%}</a>
+
+{% else %}
+    <div class="row">
+        <div class="col-md-12">{% trans "Event_not_found" %}</div>
+    </div>
+{% endif %}
+
+</div>
+
+
+{% endblock content %}
