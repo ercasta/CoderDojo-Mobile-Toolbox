@@ -25,7 +25,7 @@
         {% blocktrans with name=ticket.participant.name|title surname=ticket.participant.surname|title uuid=ticket.uuid|title %}Ticket_created {{name}} {{surname}} {{uuid}} {% endblocktrans %}
         {% endfor %}
     </ul>
-    <a href="{% url 'coderdojomobile:eventDetails' event.id %}"/>{% trans "Back to the event"%}</a>
+    <a href="{% url 'coderdojomobile:eventDetails' event.id %}">{% trans "Back to the event"%}</a>
 
 {% else %}
     <div class="row">

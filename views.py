@@ -484,7 +484,16 @@ def import_ticket(ticket, event):
         try:
             participant = Participant.objects.get(uuid=badge_id)
         except Participant.DoesNotExist:
-            None
+            pass
+    if name is not None and surname is not None \
+            and len(name) and len(surname) > 0:
+        # Look for the Participant
+        try:
+            participant = Participant.objects.get(name=name, surname=surname)
+        except Participant.DoesNotExist:
+            pass
+        except Participant.MultipleObjectsReturned:
+            pass
     if participant is None:
         # create
         badge_id = generate_uuid()
@@ -531,7 +540,7 @@ def event_ticket_upload(request, event_id):
             try:
                 event = Event.objects.get(id=event_id)
             except Event.DoesNotExist:
-                None
+                pass
             if event is not None:
                 # Check which field is populated
                 try:
