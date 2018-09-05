@@ -465,6 +465,18 @@ def generate_uuid():
     return uuid
 
 
+class TicketLoadingOutcome():
+    ok = 0
+    error = 1
+
+    def __init__(self, name, surname, ticket_id, badge_id, outcome):
+        self.name = name
+        self.surname = surname
+        self.ticket_id = ticket_id
+        self.badge_id = badge_id
+        self.outcome = outcome
+
+
 def import_ticket(ticket, event):
     '''
     if badge id is not null, it is used to identify the participant
@@ -479,13 +491,14 @@ def import_ticket(ticket, event):
     ticket_id = ticket['Ticket_id']
     badge_id = ticket['Badge_id']
     participant = None
+    outcome = None
     if badge_id is not None and len(badge_id) > 0:
         # Look for the Participant
         try:
             participant = Participant.objects.get(uuid=badge_id)
         except Participant.DoesNotExist:
             pass
-    if name is not None and surname is not None \
+    if badge_id is None and name is not None and surname is not None \
             and len(name) and len(surname) > 0:
         # Look for the Participant
         try:
@@ -493,8 +506,13 @@ def import_ticket(ticket, event):
         except Participant.DoesNotExist:
             pass
         except Participant.MultipleObjectsReturned:
-            pass
-    if participant is None:
+            outcome = TicketLoadingOutcome(
+                                          name,
+                                          surname,
+                                          ticket_id,
+                                          badge_id,
+                                          TicketLoadingOutcome.error)
+    if participant is None and outcome is None:
         # create
         badge_id = generate_uuid()
         participant = Participant.objects.create(
@@ -502,15 +520,22 @@ def import_ticket(ticket, event):
                                                 surname=surname,
                                                 uuid=badge_id
                                                 )
-    if ticket_id is None or len(ticket_id) == 0:
+    if ticket_id is None or len(ticket_id) == 0 and outcome is None:
         ticket_id = generate_uuid()
-    ticket = Ticket.objects.create(
-                                  participant=participant,
-                                  event=event,
-                                  has_checked_in=False,
-                                  uuid=ticket_id
-                                  )
-    return ticket
+    if outcome is None:
+        Ticket.objects.create(
+                             participant=participant,
+                             event=event,
+                             has_checked_in=False,
+                             uuid=ticket_id
+                             )
+        outcome = TicketLoadingOutcome(
+                                  name,
+                                  surname,
+                                  ticket_id,
+                                  badge_id,
+                                  TicketLoadingOutcome.ok)
+    return outcome
 
 
 def import_event_participants(external_ticket_list, event):
