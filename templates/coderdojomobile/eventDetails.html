@@ -52,7 +52,7 @@
             </ul>
         </div>
     </div>
-    {% if perms.change_ticket %} {#Only users with the appropriate permission can check in / out #}
+    {% if perms.coderdojomobile.change_ticket %} {#Only users with the appropriate permission can check in / out #}
     <div class="row">
         <div class="col-md-12">
         <form action="{% url 'coderdojomobile:eventCheckInOut' event.id %}" method="POST"  >
